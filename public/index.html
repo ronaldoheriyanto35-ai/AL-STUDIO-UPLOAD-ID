@@ -27,6 +27,14 @@ button{cursor:pointer}
 @media(max-width:1120px){.layout{grid-template-columns:190px minmax(0,1fr)}.rightcol{grid-column:2;display:grid;grid-template-columns:1fr 1fr}.promo{grid-column:1/-1}.sidebar{top:96px}.hero{padding:22px}}
 @media(max-width:760px){.topbar{height:70px;padding:0 14px}.brandmark{font-size:27px}.brandcopy{padding-left:10px}.brandcopy strong{font-size:14px}.brandcopy span{font-size:9px;letter-spacing:1px}.online{padding:7px 9px;font-size:0}.online .dot{width:9px;height:9px}.topright{gap:0}.layout{display:flex;flex-direction:column;padding:13px 12px 24px;gap:14px}.sidebar{position:static;padding:6px;display:flex;gap:4px;overflow:auto;white-space:nowrap}.navbtn{width:auto;flex:1;justify-content:center;padding:10px 9px;font-size:12px;margin:0}.navbtn .ico{width:auto;font-size:16px}.side-divider,.side-label,.supported,.sidefoot{display:none}.hero{min-height:145px;padding:21px 18px;margin-bottom:16px}.hero:after{font-size:38px;right:-12px;top:15%}.hero h1{font-size:29px}.hero p{font-size:12px;max-width:270px}.types{gap:8px}.typecard{padding:11px 9px;border-radius:13px}.typeicon{width:36px;height:36px;font-size:19px;border-radius:10px}.typecard strong{font-size:12px}.typecard span{font-size:10px;min-height:42px}.typecard .choose{font-size:10px;padding:7px}.panel{padding:15px}.panelhead h2{font-size:15px}.formgrid{grid-template-columns:1fr;gap:0}.field.full{grid-column:auto}.targetrow{grid-template-columns:.85fr 1.15fr;gap:9px}.rightcol{display:flex;flex-direction:column;gap:12px}.statuspanel,.historypanel,.promo{padding:15px}.footer{padding:0 15px 18px;flex-direction:column;gap:4px}.section-title{margin-top:16px}.dropzone{padding:15px 9px}}
 @media(max-width:390px){.brandcopy strong{font-size:12px}.brandcopy span{font-size:8px}.brandmark{font-size:24px}.hero h1{font-size:25px}.typecard span{min-height:51px}.navbtn{font-size:11px;gap:5px}}
+
+.panel[hidden]{display:none}
+#audioTool{margin-bottom:17px}
+.adrop{margin-top:14px;border:1px dashed #128dff;border-radius:13px;background:linear-gradient(130deg,#052047aa,#03152c);padding:20px;text-align:center;color:#a5d9ff;transition:.15s}.adrop.over{border-color:#38e0ff;background:#073064}.adrop strong{display:block;color:#e8f7ff;font-size:14px}.adrop p{margin:4px 0 12px;color:#7daedb;font-size:11px}.abtn{display:inline-block;border-radius:9px;background:#0b5cb0;color:#fff;padding:9px 16px;font-weight:700;font-size:12px;cursor:pointer}
+.aopts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px;margin-top:4px}.chk{display:flex;align-items:center;gap:9px;margin-top:14px;color:#b9d8f6;font-size:12px;font-weight:650;cursor:pointer}.chk input{width:auto;accent-color:#078cff}
+.alist{margin-top:14px;display:flex;flex-direction:column;gap:8px}.arow{display:flex;align-items:center;gap:10px;border:1px solid #123d70;background:#06152c;border-radius:11px;padding:10px 12px;min-width:0}.arow .info{min-width:0;flex:1}.arow .nm{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.arow .mt{font-size:10px;color:#82a9d0;margin-top:2px}.arow .mt.ok{color:#8df5d6}.arow .mt.bad{color:#ff8ba0}.arow .bar{height:3px;background:#0d2a4d;border-radius:3px;margin-top:6px;overflow:hidden}.arow .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#078cff,#20d8ff);transition:width .15s}.mini{flex:none;border:1px solid #1a5485;background:#0a2d53;color:#eaf8ff;border-radius:8px;padding:6px 9px;font-size:11px;font-weight:700}.mini:hover{border-color:#20bfff}
+.aactions{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}.aactions button{flex:1 1 140px;border:1px solid #1a5485;border-radius:10px;background:#0a2d53;color:#eaf8ff;padding:11px;font-weight:800;font-size:12px}.aactions button.primary{background:linear-gradient(100deg,#0875ee,#04b5f7);border-color:#32c7ff}.aactions button:disabled{opacity:.5;cursor:not-allowed}
+@media(max-width:760px){.aopts{grid-template-columns:1fr}.arow{flex-wrap:wrap}}
 </style>
 </head>
 <body>
@@ -58,6 +66,23 @@ button{cursor:pointer}
       <button class="typecard" data-t="audio"><div class="typeicon">♫</div><strong>Audio</strong><span>Audio untuk pengalaman bermain.</span><div class="choose">Pilih <b>›</b></div></button>
       <button class="typecard" data-t="file"><div class="typeicon">⬡</div><strong>File</strong><span>Model 3D: RBXM, RBXMX, atau FBX.</span><div class="choose">Pilih <b>›</b></div></button>
     </div>
+    <section class="panel" id="audioTool" hidden>
+      <div class="panelhead"><div class="miniicon">♫</div><div><h2>Konverter Audio</h2><p>Siapkan audio milikmu sebelum diunggah. Diproses di browser, file tidak dikirim ke server sampai kamu menekan upload.</p></div></div>
+      <div class="adrop" id="aDrop"><strong>Seret audio ke sini</strong><p>MP3 · WAV · OGG · FLAC · AAC · M4A — bisa banyak file sekaligus</p><label class="abtn">Pilih file<input type="file" id="aFiles" accept=".mp3,.wav,.ogg,.flac,.aac,.m4a,audio/*" multiple hidden></label></div>
+      <div class="aopts">
+        <label class="chk"><input type="checkbox" id="oNorm" checked> Normalisasi volume</label>
+        <label class="chk"><input type="checkbox" id="oMono"> Mono (file lebih kecil)</label>
+        <div class="field"><label for="oMax"><span class="labelico">◷</span> Durasi maks (detik)</label><input id="oMax" type="number" inputmode="numeric" min="1" max="3600" value="420"><div class="formnote">Batas umum audio Roblox: 7 menit (420 detik).</div></div>
+        <div class="field"><label for="oKbps"><span class="labelico">♫</span> Kualitas MP3</label><select id="oKbps"><option value="96">96 kbps (kecil)</option><option value="128" selected>128 kbps (seimbang)</option><option value="192">192 kbps (tinggi)</option></select></div>
+      </div>
+      <div class="alist" id="aList"></div>
+      <div class="aactions">
+        <button type="button" class="primary" id="aProc" disabled>Proses semua</button>
+        <button type="button" id="aZip" disabled>↓ Download ZIP</button>
+        <button type="button" id="aUp" disabled>⇧ Upload semua</button>
+      </div>
+      <div class="formnote">Upload semua memakai API key, ID pemilik, dan deskripsi dari form di bawah. Gunakan hanya audio milikmu atau yang berlisensi bebas; Roblox tetap memeriksa hak cipta pada setiap upload.</div>
+    </section>
     <section class="panel" id="upload">
       <div class="panelhead"><div class="miniicon">⇧</div><div><h2>Form Upload</h2><p id="hint">Upload gambar PNG/JPG/BMP/TGA.</p></div></div>
       <form id="f">
@@ -81,7 +106,7 @@ button{cursor:pointer}
   <aside class="rightcol">
     <section class="panel statuspanel">
       <div class="statustop"><h2>Status halaman</h2><span class="pill"><span class="dot" style="display:inline-block;width:6px;height:6px;margin-right:5px"></span>Siap</span></div>
-      <div class="metric"><span>Backend</span><strong>Node.js / Render</strong></div>
+      <div class="metric"><span>Backend</span><strong>Node.js</strong></div>
       <div class="metric"><span>Metode upload</span><strong>Roblox Open Cloud</strong></div>
       <div class="metric"><span>Batas file aplikasi</span><strong>20 MB</strong></div>
     </section>
@@ -97,12 +122,12 @@ button{cursor:pointer}
 <script>
 const H={
  decal:{hint:"Upload gambar PNG/JPG/BMP/TGA.",accept:".png,.jpg,.jpeg,.bmp,.tga",formats:"Format: PNG · JPG · BMP · TGA",icon:"▧"},
- audio:{hint:"Upload audio MP3/OGG.",accept:".mp3,.ogg",formats:"Format: MP3 · OGG",icon:"♫"},
+ audio:{hint:"Upload audio MP3/OGG. Format lain? Konversi dulu di panel atas.",accept:".mp3,.ogg",formats:"Format: MP3 · OGG",icon:"♫"},
  file:{hint:"Upload model RBXM/RBXMX/FBX.",accept:".rbxm,.rbxmx,.fbx",formats:"Format: RBXM · RBXMX · FBX",icon:"⬡"}
 };
 let type="decal";
 const $=id=>document.getElementById(id);
-function setType(t){if(!H[t])return;type=t;$("hint").textContent=H[t].hint;$("file").accept=H[t].accept;$("formats").textContent=H[t].formats;
+function setType(t){if(!H[t])return;type=t;$("hint").textContent=H[t].hint;$("file").accept=H[t].accept;$("formats").textContent=H[t].formats;$("audioTool").hidden=t!=="audio";
  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("active",b.dataset.t===t));
 }
 $("tabs").addEventListener("click",e=>{const b=e.target.closest("button[data-t]");if(b)setType(b.dataset.t)});
@@ -132,6 +157,126 @@ $("f").onsubmit=async e=>{
  finally{$("go").disabled=false;$("go").textContent="⇧  Upload Sekarang";}
 };
 $("tm").style.whiteSpace="pre-line";setType("decal");renderHistory();
+/* ===== Konverter audio (di browser) ===== */
+const A={items:[],n:0,busy:false};
+const fmtMB=b=>(b/1024/1024).toFixed(2)+" MB";
+const loaded={};
+function loadScript(src){return loaded[src]||(loaded[src]=new Promise((res,rej)=>{const s=document.createElement("script");s.src=src;s.onload=res;s.onerror=()=>{delete loaded[src];rej(new Error("Gagal memuat "+src))};document.head.appendChild(s)}))}
+async function ensureLame(){if(!window.lamejs)await loadScript("https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js").catch(()=>{throw new Error("Encoder MP3 gagal dimuat dari internet. Periksa koneksi lalu coba lagi.")});if(!window.lamejs||!window.lamejs.Mp3Encoder)throw new Error("Encoder MP3 tidak tersedia. Periksa koneksi internet lalu coba lagi.")}
+const tick=()=>new Promise(r=>setTimeout(r,0));
+function saveBlob(blob,name){const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)}
+function addAudio(files){
+ let skipped=0;
+ [...files].forEach(f=>{if(/\.(mp3|wav|ogg|flac|aac|m4a)$/i.test(f.name)||(f.type||"").startsWith("audio/"))A.items.push({id:++A.n,file:f,state:"wait",blob:null,out:"",msg:"Menunggu diproses",pct:0});else skipped++});
+ if(skipped)toast(false,"Sebagian file dilewati",skipped+" file bukan audio yang didukung.");
+ renderA();
+}
+function renderA(){
+ const list=$("aList");list.innerHTML="";
+ A.items.forEach(it=>{
+  const row=document.createElement("div");row.className="arow";
+  const info=document.createElement("div");info.className="info";
+  const nm=document.createElement("div");nm.className="nm";nm.textContent=it.file.name;
+  const mt=document.createElement("div");mt.className="mt"+(it.state==="done"||it.state==="up"?" ok":it.state==="err"?" bad":"");mt.textContent=it.msg;
+  const bar=document.createElement("div");bar.className="bar";const fill=document.createElement("i");fill.style.width=it.pct+"%";bar.append(fill);
+  info.append(nm,mt);if(it.state==="busy")info.append(bar);
+  row.append(info);
+  if(it.blob){
+   const dl=document.createElement("button");dl.type="button";dl.className="mini";dl.textContent="↓";dl.title="Download";dl.onclick=()=>saveBlob(it.blob,it.out);
+   const use=document.createElement("button");use.type="button";use.className="mini";use.textContent="Pakai di form";use.onclick=()=>useInForm(it);
+   row.append(dl,use);
+  }
+  const rm=document.createElement("button");rm.type="button";rm.className="mini";rm.textContent="✕";rm.title="Hapus";rm.disabled=A.busy;rm.onclick=()=>{A.items=A.items.filter(x=>x!==it);renderA()};
+  row.append(rm);list.append(row);
+ });
+ const any=A.items.length>0,conv=A.items.some(i=>i.blob);
+ $("aProc").disabled=A.busy||!A.items.some(i=>i.state==="wait"||i.state==="err");
+ $("aZip").disabled=A.busy||!conv;$("aUp").disabled=A.busy||!conv;
+}
+function useInForm(it){
+ const dt=new DataTransfer();dt.items.add(new File([it.blob],it.out,{type:"audio/mpeg"}));
+ $("file").files=dt.files;$("file").dispatchEvent(new Event("change"));
+ $("name").value=it.out.replace(/\.[^.]+$/,"").slice(0,50);
+ $("upload").scrollIntoView({behavior:"smooth",block:"start"});
+}
+async function convertOne(it){
+ const norm=$("oNorm").checked,wantMono=$("oMono").checked;
+ const maxSec=Math.max(1,Math.min(3600,+$("oMax").value||420)),kbps=+$("oKbps").value||128;
+ const ctx=new (window.AudioContext||window.webkitAudioContext)();
+ try{
+  it.msg="Membaca audio…";it.pct=5;renderA();
+  let buf;
+  try{buf=await ctx.decodeAudioData(await it.file.arrayBuffer())}catch{throw new Error("File tidak dapat dibaca browser (rusak atau format tidak didukung)")}
+  const sr=buf.sampleRate,total=buf.length,len=Math.min(total,Math.floor(maxSec*sr)),trimmed=len<total;
+  const mono=wantMono||buf.numberOfChannels===1,chs=mono?1:2;
+  const data=[];for(let c=0;c<chs;c++)data.push(new Float32Array(len));
+  if(mono){const n=buf.numberOfChannels;for(let c=0;c<n;c++){const src=buf.getChannelData(c);for(let i=0;i<len;i++)data[0][i]+=src[i]/n}}
+  else{data[0].set(buf.getChannelData(0).subarray(0,len));data[1].set(buf.getChannelData(1).subarray(0,len))}
+  if(trimmed){const fade=Math.min(len,Math.floor(sr*0.05));for(const d of data)for(let i=0;i<fade;i++)d[len-fade+i]*=1-i/fade}
+  if(norm){let peak=0;for(const d of data)for(let i=0;i<len;i++){const v=Math.abs(d[i]);if(v>peak)peak=v}
+   if(peak>0.0001){const g=Math.min(10,0.97/peak);for(const d of data)for(let i=0;i<len;i++)d[i]*=g}}
+  it.msg="Memuat encoder…";it.pct=15;renderA();
+  await ensureLame();
+  const to16=f=>{const o=new Int16Array(f.length);for(let i=0;i<f.length;i++){const v=Math.max(-1,Math.min(1,f[i]));o[i]=v<0?v*0x8000:v*0x7FFF}return o};
+  const L=to16(data[0]),R=chs===2?to16(data[1]):null;
+  const enc=new lamejs.Mp3Encoder(chs,sr,kbps),parts=[],BLK=1152;
+  it.msg="Mengonversi ke MP3…";
+  for(let i=0,k=0;i<len;i+=BLK,k++){
+   const out=chs===2?enc.encodeBuffer(L.subarray(i,i+BLK),R.subarray(i,i+BLK)):enc.encodeBuffer(L.subarray(i,i+BLK));
+   if(out.length)parts.push(new Uint8Array(out));
+   if(k%400===0){it.pct=15+Math.round(80*i/len);renderA();await tick()}
+  }
+  const tail=enc.flush();if(tail.length)parts.push(new Uint8Array(tail));
+  const blob=new Blob(parts,{type:"audio/mpeg"});
+  if(blob.size>20*1024*1024)throw new Error("Hasil "+fmtMB(blob.size)+" melebihi batas 20 MB. Turunkan kualitas, pakai mono, atau perpendek durasi.");
+  it.blob=blob;it.out=it.file.name.replace(/\.[^.]+$/,"")+".mp3";it.state="done";it.pct=100;
+  const dur=len/sr;it.msg=`Siap · ${fmtMB(it.file.size)} → ${fmtMB(blob.size)} · ${Math.floor(dur/60)}:${String(Math.floor(dur%60)).padStart(2,"0")}${trimmed?" · dipotong":""}`;
+ }catch(e){it.state="err";it.blob=null;it.pct=0;it.msg=e.message||"Gagal memproses"}
+ finally{ctx.close&&ctx.close()}
+}
+async function procAll(){
+ A.busy=true;renderA();
+ for(const it of A.items){if(it.state==="done"||it.state==="up")continue;it.state="busy";await convertOne(it);if(it.state==="busy")it.state="err";renderA();await tick()}
+ A.busy=false;renderA();
+ const ok=A.items.filter(i=>i.blob).length,bad=A.items.filter(i=>i.state==="err").length;
+ toast(bad===0,bad?"Selesai dengan catatan":"Konversi selesai",`${ok} file siap${bad?`, ${bad} gagal (lihat keterangan di daftar)`:""}.`);
+}
+async function zipAll(){
+ try{
+  await loadScript("vendor/jszip.min.js");
+  const zip=new JSZip(),used=new Set();
+  A.items.filter(i=>i.blob).forEach(i=>{let n=i.out,c=1;while(used.has(n.toLowerCase())){n=i.out.replace(/\.mp3$/,"")+` (${++c}).mp3`}used.add(n.toLowerCase());zip.file(n,i.blob)});
+  saveBlob(await zip.generateAsync({type:"blob"}),"al-studio-audio.zip");
+ }catch(e){toast(false,"Gagal membuat ZIP",e.message)}
+}
+function pushHistory(entry){const items=getHistory();items.unshift(entry);try{localStorage.setItem("alUploadHistory",JSON.stringify(items.slice(0,20)))}catch{}renderHistory()}
+async function uploadAll(){
+ const key=$("key").value.trim(),owner=$("owner").value.trim();
+ if(!key||!owner){toast(false,"Data belum lengkap","Isi Roblox API Key dan User ID/Group ID di form bawah dulu.");$("key").focus();return}
+ A.busy=true;renderA();let ok=0,fail=0;
+ for(const it of A.items){
+  if(!it.blob||it.state==="up")continue;
+  it.msg="Mengunggah ke Roblox…";it.state="busy";it.pct=50;renderA();
+  const d=new FormData();d.append("type","audio");d.append("file",new File([it.blob],it.out,{type:"audio/mpeg"}));d.append("apiKey",key);d.append("target",$("target").value);d.append("ownerId",owner);d.append("name",it.out.replace(/\.[^.]+$/,"").slice(0,50));d.append("description",$("desc").value);
+  try{
+   const r=await fetch("/api/upload",{method:"POST",body:d});let j;try{j=await r.json()}catch{j={error:"Respons server tidak dapat dibaca"}}
+   if(r.ok&&j.ok){it.state="up";it.msg="Terunggah · Asset ID "+j.assetId;ok++;pushHistory({type:"audio",name:j.name,assetId:j.assetId,url:j.url||"",time:Date.now()})}
+   else{it.state="done";it.msg="Upload gagal: "+(j.error||("status "+r.status));fail++}
+  }catch{it.state="done";it.msg="Upload gagal: tidak dapat terhubung ke server";fail++}
+  it.pct=100;renderA();
+ }
+ A.busy=false;renderA();
+ toast(fail===0&&ok>0,fail?"Upload selesai dengan catatan":"Upload selesai",`${ok} berhasil, ${fail} gagal.`);
+}
+$("aFiles").addEventListener("change",e=>{addAudio(e.target.files);e.target.value=""});
+const aDrop=$("aDrop");
+["dragenter","dragover"].forEach(ev=>aDrop.addEventListener(ev,e=>{e.preventDefault();aDrop.classList.add("over")}));
+["dragleave","drop"].forEach(ev=>aDrop.addEventListener(ev,e=>{e.preventDefault();aDrop.classList.remove("over")}));
+aDrop.addEventListener("drop",e=>{if(e.dataTransfer&&e.dataTransfer.files)addAudio(e.dataTransfer.files)});
+$("aProc").onclick=procAll;$("aZip").onclick=zipAll;$("aUp").onclick=uploadAll;
+renderA();
+
 </script>
 </body>
 </html>
+
