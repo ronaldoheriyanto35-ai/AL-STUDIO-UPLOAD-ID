@@ -3,72 +3,135 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#030b1b">
 <title>AL STUDIO UPLOAD ID</title>
 <style>
-:root{--bg:#14101c;--panel:#201a2e;--field:#2a2340;--text:#f1edf8;--muted:#9d93b5;--accent:#ff8a3d;--ok:#5fd38d;--err:#ff6b7a;color-scheme:dark}
+:root{color-scheme:dark;--bg:#030916;--panel:#07162d;--panel2:#091d3a;--field:#06152c;--line:#123d70;--text:#edf7ff;--muted:#8daed1;--blue:#078cff;--cyan:#20d8ff;--green:#19e5b1;--red:#ff6b86;--shadow:0 0 28px #007dff25}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,sans-serif;padding:16px 16px 40px}
-main{max-width:480px;margin:0 auto}
-h1{font-size:1.4rem;margin:8px 0 16px}
-.tabs{display:flex;gap:6px;background:var(--panel);padding:6px;border-radius:16px;margin-bottom:12px}
-.tabs button{flex:1;border:0;background:none;color:var(--muted);padding:10px;border-radius:12px;font:inherit;cursor:pointer}
-.tabs button.on{background:var(--field);color:var(--text)}
-.hint{color:var(--muted);font-size:.9rem;margin:0 0 14px}
-label{display:block;font-size:.85rem;color:var(--muted);margin:14px 0 6px}
-input,select,textarea{width:100%;background:var(--field);color:var(--text);border:1px solid transparent;border-radius:14px;padding:13px 14px;font:inherit}
-input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.go{width:100%;margin-top:20px;border:0;border-radius:16px;background:var(--accent);color:#1a1008;font:700 1rem system-ui;padding:15px;cursor:pointer}
-.go:disabled{opacity:.5}
-#toast{position:fixed;left:12px;right:12px;top:calc(12px + env(safe-area-inset-top,0px));max-width:456px;margin:auto;background:#000;border-radius:24px;padding:18px;display:none;z-index:9}
-#toast b{display:block}#toast.err b{color:var(--err)}#toast.ok b{color:var(--ok)}
-#toast .a{display:flex;gap:8px;margin-top:12px}
-#toast .a *{flex:1;border:0;border-radius:999px;padding:11px;font:600 .95rem system-ui;text-align:center;text-decoration:none;cursor:pointer}
-#open{background:#fff;color:#000}#close{background:#2a2a2a;color:#fff}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse at 55% -10%,#073d85 0,transparent 34%),linear-gradient(140deg,#020713,#041027 58%,#030916);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.topbar{height:82px;border-bottom:1px solid #12345b;background:#030b1beF;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,42px);gap:16px;position:sticky;top:0;z-index:10;backdrop-filter:blur(18px)}
+.brand{display:flex;align-items:center;gap:13px;min-width:0}.brandmark{font-weight:1000;font-size:32px;letter-spacing:-3px;color:var(--cyan);text-shadow:0 0 20px #008cffaa;line-height:1}.brandcopy{border-left:1px solid #1c5a92;padding-left:14px}.brandcopy strong{display:block;font-size:19px;letter-spacing:.5px;line-height:1.2}.brandcopy span{font-size:11px;color:#65cfff;letter-spacing:1.5px;text-transform:uppercase}
+.topright{display:flex;align-items:center;gap:12px}.online{border:1px solid #164675;border-radius:999px;padding:8px 13px;color:#8ef9dc;font-size:12px;display:flex;align-items:center;gap:8px;background:#06162a}.dot{width:8px;height:8px;background:var(--green);border-radius:50%;box-shadow:0 0 12px var(--green)}
+.layout{max-width:1540px;margin:auto;padding:26px clamp(12px,2vw,28px) 32px;display:grid;grid-template-columns:230px minmax(0,1fr) 290px;gap:22px}
+.sidebar,.panel,.hero,.typecard,.promo{border:1px solid var(--line);background:linear-gradient(145deg,#07172fef,#041027f5);border-radius:17px;box-shadow:var(--shadow)}
+.sidebar{padding:14px;height:max-content;position:sticky;top:102px}.navbtn{width:100%;border:1px solid transparent;background:transparent;color:#a9c8e8;text-align:left;padding:12px 13px;border-radius:11px;display:flex;align-items:center;gap:12px;margin:3px 0;font-weight:600}.navbtn .ico{font-size:19px;width:25px;text-align:center;color:#65b9ff}.navbtn.active,.navbtn:hover{background:linear-gradient(100deg,#0757b7,#06316c);border-color:#128eff;color:#fff;box-shadow:0 0 18px #007bff3d}.side-divider{height:1px;background:#15365a;margin:17px 0}.side-label{font-size:10px;color:#69bfff;letter-spacing:1.5px;font-weight:800;padding:0 12px 9px}.supported{display:flex;gap:10px;padding:9px 10px;color:#9fc7ed;font-size:12px}.supported b{display:block;color:#e7f5ff;font-size:13px}.miniicon{width:34px;height:34px;flex:none;display:grid;place-items:center;border-radius:10px;background:#062d5b;border:1px solid #0d66b4;color:#3edbff;font-size:17px}.sidefoot{font-size:10px;color:#6286ad;padding:16px 7px 3px}
+.maincol{min-width:0}.hero{padding:25px 28px;min-height:155px;position:relative;overflow:hidden;display:flex;align-items:center;background:radial-gradient(circle at 83% 20%,#087de766,transparent 24%),linear-gradient(105deg,#07162e,#06245a 67%,#03132a);margin-bottom:20px}.hero:after{content:"⬡  ◈  ⬡";position:absolute;right:5%;top:10%;font-size:56px;letter-spacing:12px;color:#17caff25;transform:rotate(-15deg);pointer-events:none}.hero-content{position:relative;z-index:1;max-width:610px}.eyebrow{color:#5bd9ff;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:800}.hero h1{margin:5px 0 8px;font-size:clamp(25px,3vw,37px);line-height:1.05;letter-spacing:-1px}.hero h1 span{color:#12bfff;text-shadow:0 0 24px #008bff8a}.hero p{margin:0;color:#9cc9f3;font-size:13px;max-width:490px}.hero-chip{display:inline-flex;margin-top:14px;gap:7px;align-items:center;border:1px solid #1269ac;border-radius:999px;padding:5px 10px;font-size:11px;color:#a8e9ff;background:#061a36}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:20px 0 11px}.section-title h2{font-size:16px;margin:0}.section-title p{font-size:11px;color:var(--muted);margin:2px 0 0}.smallcaps{font-size:10px;color:#6abfff;letter-spacing:1.3px;font-weight:800}
+.types{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:17px}.typecard{padding:16px;min-width:0;text-align:left;display:flex;flex-direction:column;gap:7px;transition:.18s;border-color:#124274;color:var(--text)}.typecard:hover{transform:translateY(-2px);border-color:#0d9cff}.typecard.active{border-color:#19baff;box-shadow:0 0 0 1px #078cff,0 0 25px #007dff4d;background:linear-gradient(150deg,#082b5a,#06142c)}.typeicon{width:44px;height:44px;border-radius:13px;background:linear-gradient(145deg,#0757a9,#062147);border:1px solid #1375bc;display:grid;place-items:center;color:#25d6ff;font-size:23px}.typecard strong{font-size:14px}.typecard span{font-size:11px;color:#9bbfe4;line-height:1.45;min-height:31px}.typecard .choose{display:flex;justify-content:space-between;align-items:center;background:#063c82;border-radius:8px;padding:7px 9px;color:#eaf8ff;font-size:11px;margin-top:2px}
+.panel{padding:20px}.panelhead{display:flex;align-items:center;gap:10px;margin-bottom:8px}.panelhead .miniicon{width:36px;height:36px}.panelhead h2{margin:0;font-size:17px}.panelhead p{margin:1px 0 0;color:var(--muted);font-size:11px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}.field{min-width:0;margin-top:14px}.field.full{grid-column:1/-1}.field label{display:flex;align-items:center;gap:7px;color:#b9d8f6;font-size:12px;font-weight:650;margin-bottom:7px}.labelico{color:#44caff;font-size:14px}input,select,textarea{width:100%;border:1px solid #174777;background:linear-gradient(180deg,#04142b,#061a34);color:#eff8ff;border-radius:10px;padding:12px 13px;outline:none;min-width:0}input::placeholder,textarea::placeholder{color:#547da8}input:focus,select:focus,textarea:focus{border-color:#13a9ff;box-shadow:0 0 0 3px #008dff20}textarea{resize:vertical;min-height:95px}input[type=file]{padding:8px;font-size:12px}input[type=file]::file-selector-button{border:0;border-radius:7px;background:#0b5cb0;color:white;padding:8px 10px;margin-right:9px;font-weight:700;cursor:pointer}.targetrow{display:grid;grid-template-columns:.8fr 1.2fr;gap:12px}.dropzone{margin-top:17px;border:1px dashed #128dff;border-radius:13px;background:linear-gradient(130deg,#052047aa,#03152c);padding:18px;text-align:center;color:#a5d9ff}.dropzone .cloud{font-size:27px;color:#1bc9ff}.dropzone strong{display:block;color:#e8f7ff;font-size:13px}.dropzone p{margin:3px 0;color:#7daedb;font-size:11px}.formnote{color:#759bc1;font-size:10px;margin-top:9px}.go{width:100%;margin-top:17px;border:1px solid #32c7ff;border-radius:11px;background:linear-gradient(100deg,#0875ee,#04b5f7);color:white;font-weight:800;padding:14px;box-shadow:0 6px 22px #007bff45;transition:.15s}.go:hover{filter:brightness(1.12);transform:translateY(-1px)}.go:disabled{opacity:.65;cursor:wait;transform:none}
+.rightcol{min-width:0;display:flex;flex-direction:column;gap:17px}.statuspanel{padding:18px}.statustop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:15px}.statustop h2{font-size:15px;margin:0}.pill{font-size:11px;color:#8ef9dc;background:#05342f;border:1px solid #09665a;border-radius:999px;padding:4px 9px;white-space:nowrap}.metric{display:flex;justify-content:space-between;gap:8px;border-top:1px solid #123050;padding:11px 0;font-size:12px;color:#91b7de}.metric strong{color:#e5f5ff;font-size:12px;text-align:right}.metric:last-child{padding-bottom:0}.historypanel{padding:18px}.historyhead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:13px}.historyhead h2{margin:0;font-size:15px}.textbtn{border:0;background:none;color:#21caff;font-size:11px;padding:5px}.historylist{display:flex;flex-direction:column}.historyitem{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid #102b4b;min-width:0}.historyitem:first-child{border-top:0}.historyitem .miniicon{width:36px;height:36px}.historyname{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.historymeta{font-size:10px;color:#82a9d0;margin-top:2px}.historybadge{margin-left:auto;flex:none;font-size:9px;border-radius:6px;padding:4px 6px;color:#8df5d6;background:#06372f;border:1px solid #0b6556}.empty{padding:18px 0;color:#7da2c8;text-align:center;font-size:12px}.promo{padding:18px;background:radial-gradient(circle at 95% 0,#0755a4aa,transparent 38%),linear-gradient(145deg,#071c3d,#031025);overflow:hidden}.promo .crown{font-size:23px;color:#32cfff}.promo h3{font-size:14px;margin:6px 0}.promo p{font-size:11px;color:#9abfe3;margin:0}.footer{max-width:1540px;margin:0 auto;padding:0 30px 22px;color:#547ba5;font-size:10px;display:flex;justify-content:space-between;gap:12px}
+#toast{position:fixed;left:12px;right:12px;top:calc(12px + env(safe-area-inset-top,0px));max-width:480px;margin:auto;background:#07172c;border:1px solid #1475bd;border-radius:16px;padding:16px;display:none;z-index:30;box-shadow:0 12px 50px #0009}#toast.ok{border-color:#0b9e80}#toast.err{border-color:#d84f70}#tt{display:block;font-weight:800;margin-bottom:4px}#toast.ok #tt{color:var(--green)}#toast.err #tt{color:#ff8ba0}#tm{white-space:pre-line;color:#b9d5f0;font-size:13px}.toastactions{display:flex;gap:8px;margin-top:12px}.toastactions>*{flex:1;border:1px solid #1a5485;border-radius:9px;padding:9px;background:#0a2d53;color:#eaf8ff;text-align:center;text-decoration:none;font-weight:700;font-size:12px}
+@media(max-width:1120px){.layout{grid-template-columns:190px minmax(0,1fr)}.rightcol{grid-column:2;display:grid;grid-template-columns:1fr 1fr}.promo{grid-column:1/-1}.sidebar{top:96px}.hero{padding:22px}}
+@media(max-width:760px){.topbar{height:70px;padding:0 14px}.brandmark{font-size:27px}.brandcopy{padding-left:10px}.brandcopy strong{font-size:14px}.brandcopy span{font-size:9px;letter-spacing:1px}.online{padding:7px 9px;font-size:0}.online .dot{width:9px;height:9px}.topright{gap:0}.layout{display:flex;flex-direction:column;padding:13px 12px 24px;gap:14px}.sidebar{position:static;padding:6px;display:flex;gap:4px;overflow:auto;white-space:nowrap}.navbtn{width:auto;flex:1;justify-content:center;padding:10px 9px;font-size:12px;margin:0}.navbtn .ico{width:auto;font-size:16px}.side-divider,.side-label,.supported,.sidefoot{display:none}.hero{min-height:145px;padding:21px 18px;margin-bottom:16px}.hero:after{font-size:38px;right:-12px;top:15%}.hero h1{font-size:29px}.hero p{font-size:12px;max-width:270px}.types{gap:8px}.typecard{padding:11px 9px;border-radius:13px}.typeicon{width:36px;height:36px;font-size:19px;border-radius:10px}.typecard strong{font-size:12px}.typecard span{font-size:10px;min-height:42px}.typecard .choose{font-size:10px;padding:7px}.panel{padding:15px}.panelhead h2{font-size:15px}.formgrid{grid-template-columns:1fr;gap:0}.field.full{grid-column:auto}.targetrow{grid-template-columns:.85fr 1.15fr;gap:9px}.rightcol{display:flex;flex-direction:column;gap:12px}.statuspanel,.historypanel,.promo{padding:15px}.footer{padding:0 15px 18px;flex-direction:column;gap:4px}.section-title{margin-top:16px}.dropzone{padding:15px 9px}}
+@media(max-width:390px){.brandcopy strong{font-size:12px}.brandcopy span{font-size:8px}.brandmark{font-size:24px}.hero h1{font-size:25px}.typecard span{min-height:51px}.navbtn{font-size:11px;gap:5px}}
 </style>
 </head>
 <body>
-<div id="toast"><b id="tt"></b><div id="tm"></div><div class="a"><a id="open" target="_blank" rel="noopener">Buka</a><button id="close">Tutup</button></div></div>
-<main>
-<h1>AL STUDIO UPLOAD ID</h1>
-<div class="tabs" id="tabs">
-  <button data-t="decal" class="on">Decal</button><button data-t="audio">Audio</button><button data-t="file">File</button>
+<header class="topbar" id="home">
+  <div class="brand"><div class="brandmark">AL</div><div class="brandcopy"><strong>AL STUDIO</strong><span>Upload ID</span></div></div>
+  <div class="topright"><div class="online"><span class="dot"></span> Siap digunakan</div></div>
+</header>
+<div class="layout">
+  <aside class="sidebar" aria-label="Navigasi">
+    <button class="navbtn active" data-nav="home"><span class="ico">⌂</span>Home</button>
+    <button class="navbtn" data-nav="upload"><span class="ico">⇧</span>Upload</button>
+    <button class="navbtn" data-nav="history"><span class="ico">◷</span>History</button>
+    <button class="navbtn" data-nav="settings"><span class="ico">⚙</span>Pengaturan</button>
+    <div class="side-divider"></div>
+    <div class="side-label">TIPE ASET</div>
+    <div class="supported"><div class="miniicon">▧</div><div><b>Decal</b>.png · .jpg · .bmp</div></div>
+    <div class="supported"><div class="miniicon">♫</div><div><b>Audio</b>.mp3 · .ogg</div></div>
+    <div class="supported"><div class="miniicon">⬡</div><div><b>File</b>.rbxm · .rbxmx · .fbx</div></div>
+    <div class="sidefoot">© 2026 AL STUDIO</div>
+  </aside>
+
+  <main class="maincol">
+    <section class="hero">
+      <div class="hero-content"><div class="eyebrow">Roblox asset uploader</div><h1>AL STUDIO<br><span>UPLOAD ID</span></h1><p>Upload aset Roblox dengan lebih mudah. Pilih jenis aset, lengkapi detail, lalu kirim melalui Roblox Open Cloud.</p><div class="hero-chip"><span class="dot"></span> Cepat · Praktis · Terarah</div></div>
+    </section>
+    <div class="section-title"><div><h2>Pilih tipe upload</h2><p>Pilih jenis aset yang ingin kamu unggah.</p></div><span class="smallcaps">01 / TYPE</span></div>
+    <div class="types" id="tabs">
+      <button class="typecard active" data-t="decal"><div class="typeicon">▧</div><strong>Decal</strong><span>Gambar untuk kebutuhan game Roblox.</span><div class="choose">Pilih <b>›</b></div></button>
+      <button class="typecard" data-t="audio"><div class="typeicon">♫</div><strong>Audio</strong><span>Audio untuk pengalaman bermain.</span><div class="choose">Pilih <b>›</b></div></button>
+      <button class="typecard" data-t="file"><div class="typeicon">⬡</div><strong>File</strong><span>Model 3D: RBXM, RBXMX, atau FBX.</span><div class="choose">Pilih <b>›</b></div></button>
+    </div>
+    <section class="panel" id="upload">
+      <div class="panelhead"><div class="miniicon">⇧</div><div><h2>Form Upload</h2><p id="hint">Upload gambar PNG/JPG/BMP/TGA.</p></div></div>
+      <form id="f">
+        <div class="formgrid">
+          <div class="field full"><label for="file"><span class="labelico">▤</span> Pilih file</label><input type="file" id="file" required></div>
+          <div class="field"><label for="key"><span class="labelico">⚿</span> Roblox API Key</label><input type="password" id="key" autocomplete="off" placeholder="Tempel API key Roblox" required><div class="formnote">Kunci tidak disimpan oleh halaman ini.</div></div>
+          <div class="field"><label for="name"><span class="labelico">✎</span> Nama aset</label><input id="name" maxlength="50" placeholder="Contoh: My Awesome Model" required></div>
+          <div class="field">
+            <label for="target"><span class="labelico">♙</span> Upload ke</label>
+            <div class="targetrow"><select id="target"><option value="user">Akun</option><option value="group">Grup</option></select><input id="owner" inputmode="numeric" placeholder="User ID" aria-label="User ID" required></div>
+          </div>
+          <div class="field"><label for="desc"><span class="labelico">▤</span> Deskripsi</label><textarea id="desc" rows="3" maxlength="1000" placeholder="Jelaskan tentang aset ini..."></textarea><div class="formnote" id="count">0 / 1000 karakter</div></div>
+        </div>
+        <div class="dropzone"><div class="cloud">☁</div><strong id="dropTitle">Pilih file untuk memulai</strong><p id="dropSub">File akan diproses oleh backend dan dikirim ke Roblox.</p><p id="formats">Format yang didukung akan mengikuti tipe aset.</p></div>
+        <button class="go" id="go" type="submit">⇧ &nbsp; Upload Sekarang</button>
+        <div class="formnote">Pastikan API key memiliki izin Assets yang diperlukan. Jangan bagikan API key kepada orang lain.</div>
+      </form>
+    </section>
+  </main>
+
+  <aside class="rightcol">
+    <section class="panel statuspanel">
+      <div class="statustop"><h2>Status halaman</h2><span class="pill"><span class="dot" style="display:inline-block;width:6px;height:6px;margin-right:5px"></span>Siap</span></div>
+      <div class="metric"><span>Backend</span><strong>Node.js / Render</strong></div>
+      <div class="metric"><span>Metode upload</span><strong>Roblox Open Cloud</strong></div>
+      <div class="metric"><span>Batas file aplikasi</span><strong>20 MB</strong></div>
+    </section>
+    <section class="panel historypanel" id="history">
+      <div class="historyhead"><h2>Riwayat upload</h2><button class="textbtn" id="clearHistory" type="button">Hapus</button></div>
+      <div class="historylist" id="historyList"><div class="empty">Belum ada riwayat upload di browser ini.</div></div>
+    </section>
+    <section class="promo" id="settings"><div class="crown">✦</div><h3>Upload aset dengan rapi.</h3><p>Gunakan API key yang valid dan pastikan ID akun atau grup sudah benar. Hasil upload bergantung pada respons Roblox.</p></section>
+  </aside>
 </div>
-<p class="hint" id="hint"></p>
-<form id="f">
-  <label>File</label><input type="file" id="file" required>
-  <label>API key</label><input type="password" id="key" autocomplete="off" required>
-  <div class="row">
-    <div><label>Upload ke</label><select id="target"><option value="user">Akun</option><option value="group">Grup</option></select></div>
-    <div><label id="ownerLbl">User ID</label><input id="owner" inputmode="numeric" required></div>
-  </div>
-  <label>Nama</label><input id="name" maxlength="50" required>
-  <label>Deskripsi</label><textarea id="desc" rows="3" maxlength="1000"></textarea>
-  <button class="go" id="go">Upload</button>
-</form>
-</main>
+<footer class="footer"><span>© 2026 AL STUDIO UPLOAD ID</span><span>Dibuat untuk membantu alur upload aset Roblox.</span></footer>
+<div id="toast" role="status" aria-live="polite"><b id="tt"></b><div id="tm"></div><div class="toastactions"><a id="open" target="_blank" rel="noopener">Buka aset</a><button id="close" type="button">Tutup</button></div></div>
 <script>
-const H={decal:["Upload gambar PNG/JPG/BMP/TGA.",".png,.jpg,.jpeg,.bmp,.tga"],audio:["Upload audio MP3/OGG.",".mp3,.ogg"],file:["Upload model rbxm/rbxmx/fbx.",".rbxm,.rbxmx,.fbx"]};
+const H={
+ decal:{hint:"Upload gambar PNG/JPG/BMP/TGA.",accept:".png,.jpg,.jpeg,.bmp,.tga",formats:"Format: PNG · JPG · BMP · TGA",icon:"▧"},
+ audio:{hint:"Upload audio MP3/OGG.",accept:".mp3,.ogg",formats:"Format: MP3 · OGG",icon:"♫"},
+ file:{hint:"Upload model RBXM/RBXMX/FBX.",accept:".rbxm,.rbxmx,.fbx",formats:"Format: RBXM · RBXMX · FBX",icon:"⬡"}
+};
 let type="decal";
 const $=id=>document.getElementById(id);
-function setType(t){type=t;$("hint").textContent=H[t][0]+" Semua kolom wajib diisi.";$("file").accept=H[t][1];
-  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));}
-$("tabs").onclick=e=>e.target.dataset.t&&setType(e.target.dataset.t);
-$("target").onchange=()=>$("ownerLbl").textContent=$("target").value==="group"?"Group ID":"User ID";
-$("file").onchange=()=>{const f=$("file").files[0];if(f&&!$("name").value)$("name").value=f.name.replace(/\.[^.]+$/,"")};
+function setType(t){if(!H[t])return;type=t;$("hint").textContent=H[t].hint;$("file").accept=H[t].accept;$("formats").textContent=H[t].formats;
+ document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("active",b.dataset.t===t));
+}
+$("tabs").addEventListener("click",e=>{const b=e.target.closest("button[data-t]");if(b)setType(b.dataset.t)});
+$("target").addEventListener("change",()=>{$("owner").placeholder=$("target").value==="group"?"Group ID":"User ID";$("owner").setAttribute("aria-label",$("target").value==="group"?"Group ID":"User ID")});
+$("file").addEventListener("change",()=>{const f=$("file").files[0];if(f){$("dropTitle").textContent=f.name;$("dropSub").textContent=(f.size/1024/1024).toFixed(2)+" MB · File dipilih";if(!$("name").value)$("name").value=f.name.replace(/\.[^.]+$/,"")}else{$("dropTitle").textContent="Pilih file untuk memulai";$("dropSub").textContent="File akan diproses oleh backend dan dikirim ke Roblox."}});
+$("desc").addEventListener("input",()=>{$("count").textContent=$("desc").value.length+" / 1000 karakter"});
 $("close").onclick=()=>$("toast").style.display="none";
-function toast(ok,title,msg,url){const t=$("toast");t.className=ok?"ok":"err";t.style.display="block";
-  $("tt").textContent=title;$("tm").textContent=msg;$("open").style.display=url?"":"none";if(url)$("open").href=url;}
-$("key").value=localStorage.getItem("k")||"";
-$("f").onsubmit=async e=>{e.preventDefault();$("go").disabled=true;$("go").textContent="Mengunggah…";
-  const d=new FormData();d.append("type",type);d.append("file",$("file").files[0]);d.append("apiKey",$("key").value);
-  d.append("target",$("target").value);d.append("ownerId",$("owner").value);d.append("name",$("name").value);d.append("description",$("desc").value);
-  try{const r=await fetch("/api/upload",{method:"POST",body:d});const j=await r.json();
-    if(j.ok){localStorage.setItem("k",$("key").value);toast(true,"Berhasil",`${j.name}\nID ${j.assetId}`,j.url);}
-    else toast(false,"Gagal",j.error||"Terjadi kesalahan");
-  }catch(err){toast(false,"Gagal","Tidak bisa terhubung ke server");}
-  $("go").disabled=false;$("go").textContent="Upload";};
-$("tm").style.whiteSpace="pre-line";setType("decal");
+function toast(ok,title,msg,url){const t=$("toast");t.className=ok?"ok":"err";t.style.display="block";$("tt").textContent=title;$("tm").textContent=msg;$("open").style.display=url?"":"none";if(url)$("open").href=url;}
+function getHistory(){try{return JSON.parse(localStorage.getItem("alUploadHistory")||"[]")}catch{return []}}
+function renderHistory(){const list=$("historyList"),items=getHistory();list.innerHTML="";if(!items.length){list.innerHTML='<div class="empty">Belum ada riwayat upload di browser ini.</div>';return}
+ items.slice(0,6).forEach(item=>{const row=document.createElement("div");row.className="historyitem";const icon=document.createElement("div");icon.className="miniicon";icon.textContent=H[item.type]?.icon||"⬡";const body=document.createElement("div");body.style.minWidth="0";const name=document.createElement("div");name.className="historyname";name.textContent=item.name;const meta=document.createElement("div");meta.className="historymeta";meta.textContent=(item.type||"file").toUpperCase()+" · ID "+item.assetId;body.append(name,meta);const link=document.createElement("a");link.className="historybadge";link.href=item.url;link.target="_blank";link.rel="noopener";link.textContent="Buka";row.append(icon,body,link);list.append(row)});
+}
+$("clearHistory").onclick=()=>{localStorage.removeItem("alUploadHistory");renderHistory()};
+document.querySelectorAll("[data-nav]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-nav]").forEach(x=>x.classList.toggle("active",x===b));const target=b.dataset.nav;if(target==="home")window.scrollTo({top:0,behavior:"smooth"});else if(target==="upload")$("upload").scrollIntoView({behavior:"smooth",block:"start"});else if(target==="history")$("history").scrollIntoView({behavior:"smooth",block:"start"});else $("settings").scrollIntoView({behavior:"smooth",block:"center"})}));
+$("f").onsubmit=async e=>{
+ e.preventDefault();const file=$("file").files[0];if(!file)return;
+ $("go").disabled=true;$("go").textContent="Mengunggah…";
+ const d=new FormData();d.append("type",type);d.append("file",file);d.append("apiKey",$("key").value.trim());d.append("target",$("target").value);d.append("ownerId",$("owner").value.trim());d.append("name",$("name").value.trim());d.append("description",$("desc").value);
+ try{
+  const r=await fetch("/api/upload",{method:"POST",body:d});let j;try{j=await r.json()}catch{j={error:"Respons server tidak dapat dibaca"}}
+  if(r.ok&&j.ok){
+   const items=getHistory();items.unshift({type,name:j.name||$("name").value,assetId:j.assetId,url:j.url||"",time:Date.now()});
+   try{localStorage.setItem("alUploadHistory",JSON.stringify(items.slice(0,20)))}catch{}
+   renderHistory();toast(true,"Upload berhasil",`${j.name||$("name").value}\nAsset ID: ${j.assetId}`,j.url);
+  }else toast(false,"Upload gagal",j.error||`Server merespons dengan status ${r.status}`);
+ }catch(err){toast(false,"Tidak dapat terhubung","Periksa koneksi internet dan pastikan service Render sedang berjalan.")}
+ finally{$("go").disabled=false;$("go").textContent="⇧  Upload Sekarang";}
+};
+$("tm").style.whiteSpace="pre-line";setType("decal");renderHistory();
 </script>
 </body>
 </html>
