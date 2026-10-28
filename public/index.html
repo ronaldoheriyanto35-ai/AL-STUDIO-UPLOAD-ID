@@ -35,6 +35,12 @@ button{cursor:pointer}
 .alist{margin-top:14px;display:flex;flex-direction:column;gap:8px}.arow{display:flex;align-items:center;gap:10px;border:1px solid #123d70;background:#06152c;border-radius:11px;padding:10px 12px;min-width:0}.arow .info{min-width:0;flex:1}.arow .nm{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.arow .mt{font-size:10px;color:#82a9d0;margin-top:2px}.arow .mt.ok{color:#8df5d6}.arow .mt.bad{color:#ff8ba0}.arow .bar{height:3px;background:#0d2a4d;border-radius:3px;margin-top:6px;overflow:hidden}.arow .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#078cff,#20d8ff);transition:width .15s}.mini{flex:none;border:1px solid #1a5485;background:#0a2d53;color:#eaf8ff;border-radius:8px;padding:6px 9px;font-size:11px;font-weight:700}.mini:hover{border-color:#20bfff}
 .aactions{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}.aactions button{flex:1 1 140px;border:1px solid #1a5485;border-radius:10px;background:#0a2d53;color:#eaf8ff;padding:11px;font-weight:800;font-size:12px}.aactions button.primary{background:linear-gradient(100deg,#0875ee,#04b5f7);border-color:#32c7ff}.aactions button:disabled{opacity:.5;cursor:not-allowed}
 @media(max-width:760px){.aopts{grid-template-columns:1fr}.arow{flex-wrap:wrap}}
+.player{margin-top:14px;border:1px solid #123d70;background:#06152c;border-radius:13px;padding:12px}.ptitle{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.prow{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}.prow input[type=range]{padding:0;border:0;background:none;accent-color:#078cff;flex:1 1 110px;min-width:90px}.ptime{font-size:10px;color:#82a9d0;min-width:76px;text-align:center}.prow select{width:auto;padding:6px 8px;font-size:11px}.prow .chk{margin:0;font-size:11px}.mini.on{background:#0875ee;border-color:#32c7ff}
+.arow{flex-wrap:wrap}.arow.playing{border-color:#20d8ff}.lic{flex:1 0 100%;display:grid;grid-template-columns:1fr 1.4fr;gap:8px}.lic select,.lic input{padding:7px 9px;font-size:11px}
+@media(max-width:760px){.lic{grid-template-columns:1fr}}
+.trim{flex:1 0 100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto auto;gap:8px;align-items:end}.trim label{font-size:10px;color:#82a9d0;display:block}.trim input{padding:6px 8px;font-size:11px;margin-top:2px}.trim .mini{padding:8px 9px}
+.idrow{display:flex;align-items:center;gap:10px;border:1px solid #123d70;background:#06152c;border-radius:11px;padding:8px 12px;min-width:0}.idrow .info{flex:1;min-width:0}.idrow .nm{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.idrow .mt{font-size:10px;color:#82a9d0;margin-top:1px}
+@media(max-width:760px){.trim{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -74,14 +80,31 @@ button{cursor:pointer}
         <label class="chk"><input type="checkbox" id="oMono"> Mono (file lebih kecil)</label>
         <div class="field"><label for="oMax"><span class="labelico">◷</span> Durasi maks (detik)</label><input id="oMax" type="number" inputmode="numeric" min="1" max="3600" value="420"><div class="formnote">Batas umum audio Roblox: 7 menit (420 detik).</div></div>
         <div class="field"><label for="oKbps"><span class="labelico">♫</span> Kualitas MP3</label><select id="oKbps"><option value="96">96 kbps (kecil)</option><option value="128" selected>128 kbps (seimbang)</option><option value="192">192 kbps (tinggi)</option></select></div>
+        <div class="field full"><label for="oLic"><span class="labelico">©</span> Lisensi default untuk file baru</label><select id="oLic"><option value="">Belum dipilih</option><option value="own">Karya sendiri</option><option value="cc0">CC0 / Public Domain</option><option value="ccby">CC BY (wajib kredit)</option><option value="perm">Izin tertulis dari pemilik hak</option></select><div class="formnote">Bisa diganti per file di daftar. Upload hanya jalan kalau tiap file punya lisensi.</div></div>
+      </div>
+      <div class="player" id="aPlayer">
+        <div class="ptitle" id="pTitle">Tekan ▶ pada file di daftar untuk memutar</div>
+        <div class="prow"><button type="button" class="mini" id="pPrev" title="Sebelumnya">⏮</button><button type="button" class="mini" id="pPlay" title="Putar/jeda">▶</button><button type="button" class="mini" id="pNext" title="Berikutnya">⏭</button><input type="range" id="pSeek" min="0" max="1000" value="0" aria-label="Posisi lagu"><span class="ptime" id="pTime">0:00 / 0:00</span></div>
+        <div class="prow"><span class="ptime" style="min-width:0">Vol</span><input type="range" id="pVol" min="0" max="100" value="100" style="flex:0 1 100px" aria-label="Volume"><select id="pRate" aria-label="Kecepatan"><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select><button type="button" class="mini" id="pLoop">⟲ Ulang</button><button type="button" class="mini" id="pSec" title="Ulang hanya bagian Mulai–Akhir milik file yang diputar">⟲ Bagian</button><label class="chk"><input type="checkbox" id="pAuto" checked> Lanjut otomatis</label><label class="chk"><input type="checkbox" id="pPitch" checked> Jaga nada</label></div>
+        <audio id="pAudio" preload="metadata"></audio>
       </div>
       <div class="alist" id="aList"></div>
+      <label class="chk"><input type="checkbox" id="oConfirm"> Saya punya hak atau lisensi untuk mengunggah semua audio ini</label>
       <div class="aactions">
         <button type="button" class="primary" id="aProc" disabled>Proses semua</button>
         <button type="button" id="aZip" disabled>↓ Download ZIP</button>
         <button type="button" id="aUp" disabled>⇧ Upload semua</button>
       </div>
       <div class="formnote">Upload semua memakai API key, ID pemilik, dan deskripsi dari form di bawah. Gunakan hanya audio milikmu atau yang berlisensi bebas; Roblox tetap memeriksa hak cipta pada setiap upload.</div>
+    </section>
+    <section class="panel" id="idLib" hidden style="margin-bottom:17px">
+      <div class="panelhead"><div class="miniicon">#</div><div><h2>Perpustakaan ID</h2><p>Simpan dan salin ID audio yang memang boleh kamu pakai. Tersimpan di browser ini.</p></div></div>
+      <div class="field"><textarea id="lbPaste" rows="4" placeholder="Tempel daftar: Nama Kategori ID, satu per baris. Baris judul seperti -- DUGEM diabaikan."></textarea></div>
+      <div class="aactions"><button type="button" class="primary" id="lbAdd">+ Tambah dari teks</button><button type="button" id="lbImp">Impor</button><button type="button" id="lbExp">Ekspor</button><button type="button" id="lbClr">Hapus semua</button></div>
+      <div class="aopts"><div class="field"><input id="lbQ" placeholder="Cari nama atau ID"></div><div class="field"><select id="lbCat" aria-label="Kategori"></select></div></div>
+      <div class="aactions"><button type="button" id="lbCopyAll">Salin ID hasil filter</button></div>
+      <div class="alist" id="lbList"></div>
+      <input type="file" id="lbFile" accept=".json,.txt" hidden>
     </section>
     <section class="panel" id="upload">
       <div class="panelhead"><div class="miniicon">⇧</div><div><h2>Form Upload</h2><p id="hint">Upload gambar PNG/JPG/BMP/TGA.</p></div></div>
@@ -122,17 +145,17 @@ button{cursor:pointer}
 <script>
 const H={
  decal:{hint:"Upload gambar PNG/JPG/BMP/TGA.",accept:".png,.jpg,.jpeg,.bmp,.tga",formats:"Format: PNG · JPG · BMP · TGA",icon:"▧"},
- audio:{hint:"Upload audio MP3/OGG. Format lain? Konversi dulu di panel atas.",accept:".mp3,.ogg",formats:"Format: MP3 · OGG",icon:"♫"},
+ audio:{hint:"Upload audio MP3/OGG. Banyak file atau format lain otomatis masuk antrean konverter di atas.",accept:".mp3,.ogg,.wav,.flac,.aac,.m4a,audio/*",formats:"Format: MP3 · OGG",icon:"♫"},
  file:{hint:"Upload model RBXM/RBXMX/FBX.",accept:".rbxm,.rbxmx,.fbx",formats:"Format: RBXM · RBXMX · FBX",icon:"⬡"}
 };
 let type="decal";
 const $=id=>document.getElementById(id);
-function setType(t){if(!H[t])return;type=t;$("hint").textContent=H[t].hint;$("file").accept=H[t].accept;$("formats").textContent=H[t].formats;$("audioTool").hidden=t!=="audio";
+function setType(t){if(!H[t])return;type=t;$("hint").textContent=H[t].hint;$("file").accept=H[t].accept;$("formats").textContent=H[t].formats;$("audioTool").hidden=t!=="audio";$("file").multiple=t==="audio";$("idLib").hidden=t!=="audio";
  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("active",b.dataset.t===t));
 }
 $("tabs").addEventListener("click",e=>{const b=e.target.closest("button[data-t]");if(b)setType(b.dataset.t)});
 $("target").addEventListener("change",()=>{$("owner").placeholder=$("target").value==="group"?"Group ID":"User ID";$("owner").setAttribute("aria-label",$("target").value==="group"?"Group ID":"User ID")});
-$("file").addEventListener("change",()=>{const f=$("file").files[0];if(f){$("dropTitle").textContent=f.name;$("dropSub").textContent=(f.size/1024/1024).toFixed(2)+" MB · File dipilih";if(!$("name").value)$("name").value=f.name.replace(/\.[^.]+$/,"")}else{$("dropTitle").textContent="Pilih file untuk memulai";$("dropSub").textContent="File akan diproses oleh backend dan dikirim ke Roblox."}});
+$("file").addEventListener("change",()=>{const fl=[...$("file").files];if(type==="audio"&&(fl.length>1||fl.some(x=>!/\.(mp3|ogg)$/i.test(x.name)))){addAudio(fl);$("file").value="";toast(true,"Masuk antrean",fl.length+" file ditambahkan ke Konverter Audio. Atur lisensi lalu tekan Upload semua.");$("audioTool").scrollIntoView({behavior:"smooth",block:"start"});return}const f=$("file").files[0];if(f){$("dropTitle").textContent=f.name;$("dropSub").textContent=(f.size/1024/1024).toFixed(2)+" MB · File dipilih";if(!$("name").value)$("name").value=f.name.replace(/\.[^.]+$/,"")}else{$("dropTitle").textContent="Pilih file untuk memulai";$("dropSub").textContent="File akan diproses oleh backend dan dikirim ke Roblox."}});
 $("desc").addEventListener("input",()=>{$("count").textContent=$("desc").value.length+" / 1000 karakter"});
 $("close").onclick=()=>$("toast").style.display="none";
 function toast(ok,title,msg,url){const t=$("toast");t.className=ok?"ok":"err";t.style.display="block";$("tt").textContent=title;$("tm").textContent=msg;$("open").style.display=url?"":"none";if(url)$("open").href=url;}
@@ -167,27 +190,27 @@ const tick=()=>new Promise(r=>setTimeout(r,0));
 function saveBlob(blob,name){const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)}
 function addAudio(files){
  let skipped=0;
- [...files].forEach(f=>{if(/\.(mp3|wav|ogg|flac|aac|m4a)$/i.test(f.name)||(f.type||"").startsWith("audio/"))A.items.push({id:++A.n,file:f,state:"wait",blob:null,out:"",msg:"Menunggu diproses",pct:0});else skipped++});
+ [...files].forEach(f=>{if(/\.(mp3|wav|ogg|flac|aac|m4a)$/i.test(f.name)||(f.type||"").startsWith("audio/"))A.items.push({id:++A.n,file:f,state:"wait",lic:$("oLic").value,credit:"",start:0,end:0,fadeIn:0,fadeOut:0,blob:null,out:"",msg:"Menunggu diproses",pct:0});else skipped++});
  if(skipped)toast(false,"Sebagian file dilewati",skipped+" file bukan audio yang didukung.");
  renderA();
 }
 function renderA(){
  const list=$("aList");list.innerHTML="";
  A.items.forEach(it=>{
-  const row=document.createElement("div");row.className="arow";
+  const row=document.createElement("div");row.className="arow"+(P.cur===it?" playing":"");
   const info=document.createElement("div");info.className="info";
   const nm=document.createElement("div");nm.className="nm";nm.textContent=it.file.name;
   const mt=document.createElement("div");mt.className="mt"+(it.state==="done"||it.state==="up"?" ok":it.state==="err"?" bad":"");mt.textContent=it.msg;
   const bar=document.createElement("div");bar.className="bar";const fill=document.createElement("i");fill.style.width=it.pct+"%";bar.append(fill);
   info.append(nm,mt);if(it.state==="busy")info.append(bar);
-  row.append(info);
+  row.append(info,playBtn(it));
   if(it.blob){
    const dl=document.createElement("button");dl.type="button";dl.className="mini";dl.textContent="↓";dl.title="Download";dl.onclick=()=>saveBlob(it.blob,it.out);
    const use=document.createElement("button");use.type="button";use.className="mini";use.textContent="Pakai di form";use.onclick=()=>useInForm(it);
    row.append(dl,use);
   }
-  const rm=document.createElement("button");rm.type="button";rm.className="mini";rm.textContent="✕";rm.title="Hapus";rm.disabled=A.busy;rm.onclick=()=>{A.items=A.items.filter(x=>x!==it);renderA()};
-  row.append(rm);list.append(row);
+  const rm=document.createElement("button");rm.type="button";rm.className="mini";rm.textContent="✕";rm.title="Hapus";rm.disabled=A.busy;rm.onclick=()=>{if(P.cur===it)stopPlayer();A.items=A.items.filter(x=>x!==it);renderA()};
+  row.append(rm,licRow(it),trimRow(it));list.append(row);
  });
  const any=A.items.length>0,conv=A.items.some(i=>i.blob);
  $("aProc").disabled=A.busy||!A.items.some(i=>i.state==="wait"||i.state==="err");
@@ -207,12 +230,14 @@ async function convertOne(it){
   it.msg="Membaca audio…";it.pct=5;renderA();
   let buf;
   try{buf=await ctx.decodeAudioData(await it.file.arrayBuffer())}catch{throw new Error("File tidak dapat dibaca browser (rusak atau format tidak didukung)")}
-  const sr=buf.sampleRate,total=buf.length,len=Math.min(total,Math.floor(maxSec*sr)),trimmed=len<total;
+  const sr=buf.sampleRate,total=buf.length,off=Math.min(total,Math.max(0,Math.floor((it.start||0)*sr))),avail=total-off,endLim=it.end>0?Math.max(0,Math.min(total,Math.floor(it.end*sr))-off):avail,len=Math.min(endLim,Math.floor(maxSec*sr)),trimmed=len<avail||off>0;
+  if(len<sr*0.1)throw new Error("Rentang potong terlalu pendek. Periksa Mulai dan Akhir.");
   const mono=wantMono||buf.numberOfChannels===1,chs=mono?1:2;
   const data=[];for(let c=0;c<chs;c++)data.push(new Float32Array(len));
-  if(mono){const n=buf.numberOfChannels;for(let c=0;c<n;c++){const src=buf.getChannelData(c);for(let i=0;i<len;i++)data[0][i]+=src[i]/n}}
-  else{data[0].set(buf.getChannelData(0).subarray(0,len));data[1].set(buf.getChannelData(1).subarray(0,len))}
+  if(mono){const n=buf.numberOfChannels;for(let c=0;c<n;c++){const src=buf.getChannelData(c);for(let i=0;i<len;i++)data[0][i]+=src[off+i]/n}}
+  else{data[0].set(buf.getChannelData(0).subarray(off,off+len));data[1].set(buf.getChannelData(1).subarray(off,off+len))}
   if(trimmed){const fade=Math.min(len,Math.floor(sr*0.05));for(const d of data)for(let i=0;i<fade;i++)d[len-fade+i]*=1-i/fade}
+  {const fi=Math.min(len,Math.floor((it.fadeIn||0)*sr)),fo=Math.min(len,Math.floor((it.fadeOut||0)*sr));for(const d of data){for(let i=0;i<fi;i++)d[i]*=i/fi;for(let i=0;i<fo;i++)d[len-1-i]*=i/fo}}
   if(norm){let peak=0;for(const d of data)for(let i=0;i<len;i++){const v=Math.abs(d[i]);if(v>peak)peak=v}
    if(peak>0.0001){const g=Math.min(10,0.97/peak);for(const d of data)for(let i=0;i<len;i++)d[i]*=g}}
   it.msg="Memuat encoder…";it.pct=15;renderA();
@@ -246,6 +271,7 @@ async function zipAll(){
   await loadScript("vendor/jszip.min.js");
   const zip=new JSZip(),used=new Set();
   A.items.filter(i=>i.blob).forEach(i=>{let n=i.out,c=1;while(used.has(n.toLowerCase())){n=i.out.replace(/\.mp3$/,"")+` (${++c}).mp3`}used.add(n.toLowerCase());zip.file(n,i.blob)});
+  zip.file("LICENSES.txt",A.items.filter(i=>i.blob).map(i=>i.out+"\n  Lisensi: "+(LIC[i.lic]||"Belum dipilih")+"\n  Sumber/kredit: "+(i.credit||"-")).join("\n\n"));
   saveBlob(await zip.generateAsync({type:"blob"}),"al-studio-audio.zip");
  }catch(e){toast(false,"Gagal membuat ZIP",e.message)}
 }
@@ -253,11 +279,14 @@ function pushHistory(entry){const items=getHistory();items.unshift(entry);try{lo
 async function uploadAll(){
  const key=$("key").value.trim(),owner=$("owner").value.trim();
  if(!key||!owner){toast(false,"Data belum lengkap","Isi Roblox API Key dan User ID/Group ID di form bawah dulu.");$("key").focus();return}
+ const bad=A.items.filter(i=>i.blob&&i.state!=="up"&&(!i.lic||((i.lic==="ccby"||i.lic==="perm")&&!i.credit.trim())));
+ if(bad.length){toast(false,"Lisensi belum lengkap","Pilih lisensi untuk tiap file. CC BY dan izin tertulis wajib mengisi sumber/kredit.\nPerlu dicek: "+bad.slice(0,5).map(i=>i.out).join(", "));return}
+ if(!$("oConfirm").checked){toast(false,"Konfirmasi dulu","Centang pernyataan hak/lisensi sebelum upload.");return}
  A.busy=true;renderA();let ok=0,fail=0;
  for(const it of A.items){
   if(!it.blob||it.state==="up")continue;
   it.msg="Mengunggah ke Roblox…";it.state="busy";it.pct=50;renderA();
-  const d=new FormData();d.append("type","audio");d.append("file",new File([it.blob],it.out,{type:"audio/mpeg"}));d.append("apiKey",key);d.append("target",$("target").value);d.append("ownerId",owner);d.append("name",it.out.replace(/\.[^.]+$/,"").slice(0,50));d.append("description",$("desc").value);
+  const d=new FormData();d.append("type","audio");d.append("file",new File([it.blob],it.out,{type:"audio/mpeg"}));d.append("apiKey",key);d.append("target",$("target").value);d.append("ownerId",owner);d.append("name",it.out.replace(/\.[^.]+$/,"").slice(0,50));d.append("description",descFor(it));
   try{
    const r=await fetch("/api/upload",{method:"POST",body:d});let j;try{j=await r.json()}catch{j={error:"Respons server tidak dapat dibaca"}}
    if(r.ok&&j.ok){it.state="up";it.msg="Terunggah · Asset ID "+j.assetId;ok++;pushHistory({type:"audio",name:j.name,assetId:j.assetId,url:j.url||"",time:Date.now()})}
@@ -268,6 +297,73 @@ async function uploadAll(){
  A.busy=false;renderA();
  toast(fail===0&&ok>0,fail?"Upload selesai dengan catatan":"Upload selesai",`${ok} berhasil, ${fail} gagal.`);
 }
+const LIC={own:"Karya sendiri",cc0:"CC0 / Public Domain",ccby:"CC BY",perm:"Izin tertulis pemilik hak"};
+function descFor(it){const tail="\n\nLisensi: "+LIC[it.lic]+(it.credit.trim()?" — "+it.credit.trim():"");return($("desc").value.slice(0,Math.max(0,1000-tail.length))+tail).trim()}
+function licRow(it){const w=document.createElement("div");w.className="lic";const s=document.createElement("select");s.innerHTML=$("oLic").innerHTML;s.value=it.lic;s.setAttribute("aria-label","Lisensi");s.onchange=()=>{it.lic=s.value};const c=document.createElement("input");c.placeholder="Sumber / pencipta / link lisensi";c.maxLength=120;c.value=it.credit;c.oninput=()=>{it.credit=c.value};w.append(s,c);return w}
+/* ===== Pemutar ===== */
+const P={cur:null,conv:false,url:null,seek:false},aud=$("pAudio");
+const fmtT=s=>{s=Math.max(0,s||0);return Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0")};
+function applyRate(){const r=+$("pRate").value;aud.defaultPlaybackRate=r;aud.playbackRate=r;aud.preservesPitch=aud.mozPreservesPitch=aud.webkitPreservesPitch=$("pPitch").checked}
+function playItem(it,force){
+ if(!force&&P.cur===it&&P.conv===!!it.blob&&aud.src){aud.paused?aud.play().catch(()=>{}):aud.pause();return}
+ if(P.url)URL.revokeObjectURL(P.url);
+ P.cur=it;P.conv=!!it.blob;P.url=URL.createObjectURL(it.blob||it.file);aud.src=P.url;applyRate();
+ $("pTitle").textContent=(it.blob?it.out+" · hasil konversi":it.file.name+" · file asli");
+ aud.play().catch(()=>toast(false,"Tidak bisa diputar","Browser tidak bisa memutar file ini."));renderA();
+}
+function stopPlayer(){aud.pause();aud.removeAttribute("src");aud.load();if(P.url)URL.revokeObjectURL(P.url);P.url=null;P.cur=null;$("pTitle").textContent="Tekan ▶ pada file di daftar untuk memutar";$("pSeek").value=0;$("pTime").textContent="0:00 / 0:00";$("pPlay").textContent="▶"}
+function stepPlayer(d){const l=A.items;if(!l.length)return;const i=l.indexOf(P.cur);playItem(l[((i<0?(d>0?-1:0):i)+d+l.length)%l.length],true)}
+function playBtn(it){const b=document.createElement("button");b.type="button";b.className="mini";const on=P.cur===it&&!aud.paused;b.textContent=on?"❚❚":"▶";b.title=on?"Jeda":"Putar";b.onclick=()=>playItem(it);return b}
+$("pPlay").onclick=()=>{if(P.cur)aud.paused?aud.play().catch(()=>{}):aud.pause();else if(A.items[0])playItem(A.items[0],true)};
+$("pPrev").onclick=()=>stepPlayer(-1);$("pNext").onclick=()=>stepPlayer(1);
+$("pVol").oninput=()=>{aud.volume=$("pVol").value/100};
+$("pRate").onchange=applyRate;$("pPitch").onchange=applyRate;
+$("pLoop").onclick=()=>{aud.loop=!aud.loop;$("pLoop").classList.toggle("on",aud.loop)};
+$("pSeek").addEventListener("input",()=>{P.seek=true;if(aud.duration)aud.currentTime=$("pSeek").value/1000*aud.duration});
+["change","pointerup","keyup"].forEach(ev=>$("pSeek").addEventListener(ev,()=>{P.seek=false}));
+aud.addEventListener("timeupdate",()=>{if(!P.seek&&aud.duration)$("pSeek").value=Math.round(aud.currentTime/aud.duration*1000);$("pTime").textContent=fmtT(aud.currentTime)+" / "+fmtT(aud.duration)});
+aud.addEventListener("loadedmetadata",()=>{$("pTime").textContent="0:00 / "+fmtT(aud.duration)});
+aud.addEventListener("play",()=>{$("pPlay").textContent="❚❚";renderA()});
+aud.addEventListener("pause",()=>{$("pPlay").textContent="▶";renderA()});
+aud.addEventListener("ended",()=>{if($("pAuto").checked&&A.items.indexOf(P.cur)<A.items.length-1)stepPlayer(1)});
+function dirty(it){if(it.blob||it.state==="done"||it.state==="up"){it.blob=null;it.state="wait";it.pct=0;it.msg="Pengaturan diubah · proses ulang"}renderA()}
+function trimRow(it){
+ const w=document.createElement("div");w.className="trim";
+ [["start","Mulai (dtk)"],["end","Akhir (dtk, 0=habis)"],["fadeIn","Fade in (dtk)"],["fadeOut","Fade out (dtk)"]].forEach(([k,lb])=>{
+  const l=document.createElement("label");l.textContent=lb;const i=document.createElement("input");i.type="number";i.min="0";i.step="0.1";i.inputMode="decimal";i.value=it[k]||0;
+  i.onchange=()=>{it[k]=Math.max(0,+i.value||0);dirty(it)};l.append(i);w.append(l)});
+ [["start","[ Mulai"],["end","Akhir ]"]].forEach(([k,t])=>{const b=document.createElement("button");b.type="button";b.className="mini";b.textContent=t;b.title="Ambil dari posisi pemutar";
+  b.onclick=()=>{if(P.cur!==it||P.conv){toast(false,"Putar file asli dulu","Tekan ▶ pada file ini sebelum diproses, lalu tekan tombol ini di posisi yang diinginkan.");return}it[k]=+aud.currentTime.toFixed(2);dirty(it)};w.append(b)});
+ return w}
+$("pSec").onclick=()=>{P.sec=!P.sec;$("pSec").classList.toggle("on",P.sec);if(P.sec&&P.cur&&!P.conv&&aud.currentTime<(P.cur.start||0))aud.currentTime=P.cur.start||0};
+aud.addEventListener("timeupdate",()=>{if(P.sec&&P.cur&&!P.conv){const a=P.cur.start||0,b=P.cur.end>0?P.cur.end:aud.duration;if(b>a&&aud.currentTime>=b)aud.currentTime=a}});
+/* ===== Perpustakaan ID ===== */
+const CATS=["DJ Remix","Pop Punk","Pop Sad","Tradisional","Funkot","Dustep","Dangdut","Melayu","Dugem","Koplo","Joget","Pargoy","Remix","Pop"].sort((a,b)=>b.length-a.length);
+const lbGet=()=>{try{return JSON.parse(localStorage.getItem("alIdLib")||"[]")}catch{return[]}};
+const lbSet=a=>{try{localStorage.setItem("alIdLib",JSON.stringify(a))}catch{toast(false,"Penyimpanan penuh","Perpustakaan tidak bisa disimpan di browser ini.")}};
+function lbParse(t){const out=[];t.split(/\r?\n/).forEach(l=>{l=l.trim();if(!l||/^(--|>|#)/.test(l))return;const m=l.match(/^(.*?)[\s,|:\t-]*(\d{5,})$/);if(!m)return;let nm=m[1].trim(),cat="Lainnya";for(const c of CATS)if(nm.length>c.length&&nm.endsWith(c)){cat=c;nm=nm.slice(0,-c.length).trim();break}if(nm)out.push({name:nm.slice(0,80),cat,id:m[2]})});return out}
+function lbMerge(list){const cur=lbGet(),seen=new Set(cur.map(x=>x.id));let n=0;list.forEach(x=>{if(x&&x.id&&/^\d{5,}$/.test(String(x.id))&&!seen.has(String(x.id))){seen.add(String(x.id));cur.push({name:String(x.name||"Tanpa nama").slice(0,80),cat:String(x.cat||"Lainnya").slice(0,30),id:String(x.id)});n++}});lbSet(cur);lbRender();return n}
+async function copyText(t){try{await navigator.clipboard.writeText(t)}catch{const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}}
+function lbFiltered(){const q=$("lbQ").value.trim().toLowerCase(),c=$("lbCat").value;return lbGet().filter(x=>(!c||x.cat===c)&&(!q||x.name.toLowerCase().includes(q)||x.id.includes(q)))}
+function lbRender(){
+ const all=lbGet(),sel=$("lbCat"),keep=sel.value,cats={};all.forEach(x=>cats[x.cat]=(cats[x.cat]||0)+1);
+ sel.innerHTML="";const o0=document.createElement("option");o0.value="";o0.textContent="Semua kategori ("+all.length+")";sel.append(o0);
+ Object.keys(cats).sort().forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c+" ("+cats[c]+")";sel.append(o)});sel.value=cats[keep]?keep:"";
+ const f=lbFiltered(),list=$("lbList");list.innerHTML="";
+ if(!f.length){const e=document.createElement("div");e.className="empty";e.textContent=all.length?"Tidak ada yang cocok.":"Perpustakaan masih kosong. Tempel daftar ID di atas.";list.append(e);return}
+ f.slice(0,100).forEach(x=>{const r=document.createElement("div");r.className="idrow";const i=document.createElement("div");i.className="info";const n=document.createElement("div");n.className="nm";n.textContent=x.name;const m=document.createElement("div");m.className="mt";m.textContent=x.cat+" · "+x.id;i.append(n,m);
+  const cp=document.createElement("button");cp.type="button";cp.className="mini";cp.textContent="Salin ID";cp.onclick=async()=>{await copyText(x.id);cp.textContent="Tersalin ✓";setTimeout(()=>cp.textContent="Salin ID",1200)};
+  const rm=document.createElement("button");rm.type="button";rm.className="mini";rm.textContent="✕";rm.title="Hapus";rm.onclick=()=>{lbSet(lbGet().filter(y=>y.id!==x.id));lbRender()};r.append(i,cp,rm);list.append(r)});
+ if(f.length>100){const e=document.createElement("div");e.className="empty";e.textContent="…dan "+(f.length-100)+" lainnya. Persempit dengan pencarian atau kategori.";list.append(e)}
+}
+$("lbAdd").onclick=()=>{const l=lbParse($("lbPaste").value);if(!l.length){toast(false,"Tidak ada ID terbaca","Format tiap baris: Nama Kategori ID (ID minimal 5 digit).");return}const n=lbMerge(l);$("lbPaste").value="";toast(true,"Perpustakaan diperbarui",n+" ID baru ditambahkan, "+(l.length-n)+" sudah ada.")};
+$("lbQ").oninput=lbRender;$("lbCat").onchange=lbRender;
+$("lbCopyAll").onclick=async()=>{const f=lbFiltered();if(!f.length)return;await copyText(f.map(x=>x.id).join("\n"));toast(true,"Tersalin",f.length+" ID disalin, satu per baris.")};
+$("lbExp").onclick=()=>{const a=lbGet();if(!a.length){toast(false,"Kosong","Belum ada yang diekspor.");return}saveBlob(new Blob([JSON.stringify(a,null,1)],{type:"application/json"}),"al-studio-id-library.json")};
+$("lbImp").onclick=()=>$("lbFile").click();
+$("lbFile").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;try{const t=await f.text();const l=t.trim().startsWith("[")?JSON.parse(t):lbParse(t);toast(true,"Impor selesai",lbMerge(l)+" ID baru ditambahkan.")}catch{toast(false,"Impor gagal","File tidak dapat dibaca.")}};
+$("lbClr").onclick=()=>{if(lbGet().length&&confirm("Hapus semua ID di perpustakaan?")){lbSet([]);lbRender()}};
+lbRender();
 $("aFiles").addEventListener("change",e=>{addAudio(e.target.files);e.target.value=""});
 const aDrop=$("aDrop");
 ["dragenter","dragover"].forEach(ev=>aDrop.addEventListener(ev,e=>{e.preventDefault();aDrop.classList.add("over")}));
@@ -279,4 +375,3 @@ renderA();
 </script>
 </body>
 </html>
-
