@@ -98,9 +98,9 @@ button{cursor:pointer}
       <div class="formnote">Upload semua memakai API key, ID pemilik, dan deskripsi dari form di bawah. Gunakan hanya audio milikmu atau yang berlisensi bebas; Roblox tetap memeriksa hak cipta pada setiap upload.</div>
     </section>
     <section class="panel" id="idLib" hidden style="margin-bottom:17px">
-      <div class="panelhead"><div class="miniicon">#</div><div><h2>Perpustakaan ID</h2><p>Simpan dan salin ID audio yang memang boleh kamu pakai. Tersimpan di browser ini.</p></div></div>
-      <div class="field"><textarea id="lbPaste" rows="4" placeholder="Tempel daftar: Nama Kategori ID, satu per baris. Baris judul seperti -- DUGEM diabaikan."></textarea></div>
-      <div class="aactions"><button type="button" class="primary" id="lbAdd">+ Tambah dari teks</button><button type="button" id="lbImp">Impor</button><button type="button" id="lbExp">Ekspor</button><button type="button" id="lbClr">Hapus semua</button></div>
+      <div class="panelhead"><div class="miniicon">#</div><div><h2>Input Banyak ID Lagu</h2><p>Tempel banyak ID audio sekaligus—satu ID per baris. Bisa juga memakai tautan audio Roblox. Daftar tersimpan di browser ini.</p></div></div>
+      <div class="field"><label for="lbPaste"><span class="labelico">♫</span> Daftar ID audio / tautan Roblox</label><textarea id="lbPaste" rows="6" placeholder="Contoh:\n123456789012\n987654321098\nhttps://www.roblox.com/library/123456789012/Nama-Audio\nNama Lagu Remix 123456789012"></textarea><div class="formnote">Fitur ini merapikan dan memvalidasi format ID, bukan membuat ID baru atau melewati izin/pembatasan audio Roblox.</div></div>
+      <div class="aactions"><button type="button" class="primary" id="lbAdd">+ Cek & Tambah Semua ID</button><button type="button" id="lbImp">Impor</button><button type="button" id="lbExp">Ekspor</button><button type="button" id="lbClr">Hapus semua</button></div>
       <div class="aopts"><div class="field"><input id="lbQ" placeholder="Cari nama atau ID"></div><div class="field"><select id="lbCat" aria-label="Kategori"></select></div></div>
       <div class="aactions"><button type="button" id="lbCopyAll">Salin ID hasil filter</button></div>
       <div class="alist" id="lbList"></div>
@@ -171,7 +171,8 @@ $("f").onsubmit=async e=>{
  const d=new FormData();d.append("type",type);d.append("file",file);d.append("apiKey",$("key").value.trim());d.append("target",$("target").value);d.append("ownerId",$("owner").value.trim());d.append("name",$("name").value.trim());d.append("description",$("desc").value);
  try{
   const r=await fetch("/api/upload",{method:"POST",body:d});let j;try{j=await r.json()}catch{j={error:"Respons server tidak dapat dibaca"}}
-  if(r.ok&&j.ok){
+  if(r.ok&&j.ok&&j.pending){toast(true,"Upload diterima",j.message||"Roblox sedang memproses aset. Cek Creator Dashboard beberapa saat lagi.");return}
+  if(r.ok&&j.ok&&j.assetId){
    const items=getHistory();items.unshift({type,name:j.name||$("name").value,assetId:j.assetId,url:j.url||"",time:Date.now()});
    try{localStorage.setItem("alUploadHistory",JSON.stringify(items.slice(0,20)))}catch{}
    renderHistory();toast(true,"Upload berhasil",`${j.name||$("name").value}\nAsset ID: ${j.assetId}`,j.url);
@@ -289,7 +290,8 @@ async function uploadAll(){
   const d=new FormData();d.append("type","audio");d.append("file",new File([it.blob],it.out,{type:"audio/mpeg"}));d.append("apiKey",key);d.append("target",$("target").value);d.append("ownerId",owner);d.append("name",it.out.replace(/\.[^.]+$/,"").slice(0,50));d.append("description",descFor(it));
   try{
    const r=await fetch("/api/upload",{method:"POST",body:d});let j;try{j=await r.json()}catch{j={error:"Respons server tidak dapat dibaca"}}
-   if(r.ok&&j.ok){it.state="up";it.msg="Terunggah · Asset ID "+j.assetId;ok++;pushHistory({type:"audio",name:j.name,assetId:j.assetId,url:j.url||"",time:Date.now()})}
+   if(r.ok&&j.ok&&j.assetId){it.state="up";it.msg="Terunggah · Asset ID "+j.assetId;ok++;pushHistory({type:"audio",name:j.name,assetId:j.assetId,url:j.url||"",time:Date.now()})}
+   else if(r.ok&&j.ok&&j.pending){it.state="done";it.msg="Diterima Roblox, masih diproses. Cek Creator Dashboard.";fail++}
    else{it.state="done";it.msg="Upload gagal: "+(j.error||("status "+r.status));fail++}
   }catch{it.state="done";it.msg="Upload gagal: tidak dapat terhubung ke server";fail++}
   it.pct=100;renderA();
@@ -341,7 +343,7 @@ aud.addEventListener("timeupdate",()=>{if(P.sec&&P.cur&&!P.conv){const a=P.cur.s
 const CATS=["DJ Remix","Pop Punk","Pop Sad","Tradisional","Funkot","Dustep","Dangdut","Melayu","Dugem","Koplo","Joget","Pargoy","Remix","Pop"].sort((a,b)=>b.length-a.length);
 const lbGet=()=>{try{return JSON.parse(localStorage.getItem("alIdLib")||"[]")}catch{return[]}};
 const lbSet=a=>{try{localStorage.setItem("alIdLib",JSON.stringify(a))}catch{toast(false,"Penyimpanan penuh","Perpustakaan tidak bisa disimpan di browser ini.")}};
-function lbParse(t){const out=[];t.split(/\r?\n/).forEach(l=>{l=l.trim();if(!l||/^(--|>|#)/.test(l))return;const m=l.match(/^(.*?)[\s,|:\t-]*(\d{5,})$/);if(!m)return;let nm=m[1].trim(),cat="Lainnya";for(const c of CATS)if(nm.length>c.length&&nm.endsWith(c)){cat=c;nm=nm.slice(0,-c.length).trim();break}if(nm)out.push({name:nm.slice(0,80),cat,id:m[2]})});return out}
+function lbParse(t){const out=[];t.split(/\r?\n/).forEach((raw,idx)=>{let l=raw.trim();if(!l||/^(--|>|#)/.test(l))return;let id="",nm="";const urlMatch=l.match(/(?:roblox\.com\/(?:library|catalog|asset)\/(\d+)|[?&]id=(\d+))/i);if(urlMatch){id=urlMatch[1]||urlMatch[2];nm=l.replace(/https?:\/\/\S+/ig,"").trim()}else if(/^\d{5,}$/.test(l)){id=l;nm="Lagu "+id}else{const m=l.match(/^(.*?)[\s,|:\t-]*(\d{5,})$/);if(!m)return;nm=m[1].trim();id=m[2]}if(!/^\d{5,}$/.test(id))return;let cat="Lainnya";for(const c of CATS)if(nm.length>c.length&&nm.toLowerCase().endsWith(c.toLowerCase())){cat=c;nm=nm.slice(0,-c.length).trim();break}if(!nm)nm="Lagu "+id;out.push({name:nm.slice(0,80),cat,id})});return out}
 function lbMerge(list){const cur=lbGet(),seen=new Set(cur.map(x=>x.id));let n=0;list.forEach(x=>{if(x&&x.id&&/^\d{5,}$/.test(String(x.id))&&!seen.has(String(x.id))){seen.add(String(x.id));cur.push({name:String(x.name||"Tanpa nama").slice(0,80),cat:String(x.cat||"Lainnya").slice(0,30),id:String(x.id)});n++}});lbSet(cur);lbRender();return n}
 async function copyText(t){try{await navigator.clipboard.writeText(t)}catch{const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}}
 function lbFiltered(){const q=$("lbQ").value.trim().toLowerCase(),c=$("lbCat").value;return lbGet().filter(x=>(!c||x.cat===c)&&(!q||x.name.toLowerCase().includes(q)||x.id.includes(q)))}
@@ -356,7 +358,7 @@ function lbRender(){
   const rm=document.createElement("button");rm.type="button";rm.className="mini";rm.textContent="✕";rm.title="Hapus";rm.onclick=()=>{lbSet(lbGet().filter(y=>y.id!==x.id));lbRender()};r.append(i,cp,rm);list.append(r)});
  if(f.length>100){const e=document.createElement("div");e.className="empty";e.textContent="…dan "+(f.length-100)+" lainnya. Persempit dengan pencarian atau kategori.";list.append(e)}
 }
-$("lbAdd").onclick=()=>{const l=lbParse($("lbPaste").value);if(!l.length){toast(false,"Tidak ada ID terbaca","Format tiap baris: Nama Kategori ID (ID minimal 5 digit).");return}const n=lbMerge(l);$("lbPaste").value="";toast(true,"Perpustakaan diperbarui",n+" ID baru ditambahkan, "+(l.length-n)+" sudah ada.")};
+$("lbAdd").onclick=()=>{const l=lbParse($("lbPaste").value);if(!l.length){toast(false,"Tidak ada ID terbaca","Tempel ID angka (minimal 5 digit), tautan Roblox, atau Nama Lagu + ID; satu per baris.");return}const n=lbMerge(l);$("lbPaste").value="";toast(true,"Pemeriksaan selesai",n+" ID baru ditambahkan, "+(l.length-n)+" sudah ada/duplikat. ID hanya divalidasi formatnya, bukan dicek akses audio Roblox.")};
 $("lbQ").oninput=lbRender;$("lbCat").onchange=lbRender;
 $("lbCopyAll").onclick=async()=>{const f=lbFiltered();if(!f.length)return;await copyText(f.map(x=>x.id).join("\n"));toast(true,"Tersalin",f.length+" ID disalin, satu per baris.")};
 $("lbExp").onclick=()=>{const a=lbGet();if(!a.length){toast(false,"Kosong","Belum ada yang diekspor.");return}saveBlob(new Blob([JSON.stringify(a,null,1)],{type:"application/json"}),"al-studio-id-library.json")};
