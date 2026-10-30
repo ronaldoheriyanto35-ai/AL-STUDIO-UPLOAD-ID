@@ -1,0 +1,5 @@
+
+User-agent: *
+Allow: /
+
+Sitemap: https://al-studio-upload-id.vercel.app/sitemap.xml
